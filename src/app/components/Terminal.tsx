@@ -597,6 +597,18 @@ export default function DesktopUI() {
   const [showNotification, setShowNotification] = useState(false);
   const [showFileManager, setShowFileManager] = useState(false);
   const [currentFolder, setCurrentFolder] = useState<'internship' | 'featured' | null>(null);
+  const isMobile = windowDimensions.width < 768;
+  const mobileIconPositions = [
+    { top: 120, left: 70 },
+    { top: 120, left: 185 },
+    { top: 230, left: 70 },
+  ];
+
+  const iconLabelMap: Record<string, string> = {
+    featuredProjects: "Projects",
+    zaneCoderInternship: "Internship",
+    "downloadMyResume.bat": "Resume",
+  };
 
   useEffect(() => {
     const updateTime = () => {
@@ -639,7 +651,7 @@ export default function DesktopUI() {
     setIconPositions(prev => {
       const iconHeight = 100;
       const iconWidth = 100;
-      const dockHeight = 150;
+      const dockHeight = isMobile ? 120 : 150;
       const viewportHeight = windowDimensions.height - dockHeight - iconHeight;
       const viewportWidth = windowDimensions.width - iconWidth;
       const minTop = 40;
@@ -681,30 +693,30 @@ export default function DesktopUI() {
   };
 
   const MenuBar = () => (
-    <div className="absolute top-0 left-0 w-full h-8 bg-gray-900/80 backdrop-blur-xl flex items-center px-4 justify-between border-b border-white/10">
-      <div className="flex items-center space-x-6">
+    <div className="absolute top-0 left-0 w-full h-8 bg-gray-900/80 backdrop-blur-xl flex items-center px-3 md:px-4 justify-between border-b border-white/10">
+      <div className="flex items-center space-x-3 md:space-x-6">
         <div className="flex items-center space-x-2">
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16.5c-4.14 0-7.5-3.36-7.5-7.5S7.86 4.5 12 4.5s7.5 3.36 7.5 7.5-3.36 7.5-7.5 7.5z" fill="#007AFF"/>
             <path d="M12 6.75c-2.9 0-5.25 2.35-5.25 5.25s2.35 5.25 5.25 5.25 5.25-2.35 5.25-5.25S14.9 6.75 12 6.75z" fill="#007AFF"/>
           </svg>
-          <span className="font-medium text-white">Neil Gualiza</span>
+          <span className="font-medium text-white text-xs md:text-sm">Neil Gualiza</span>
         </div>
-        <div className="flex space-x-4 text-sm text-gray-300/80">
+        <div className="hidden md:flex space-x-4 text-sm text-gray-300/80">
           <span className="hover:text-white transition-colors">File</span>
           <span className="hover:text-white transition-colors">Go</span>
           <span className="hover:text-white transition-colors">Help</span>
         </div>
       </div>
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-3 text-sm text-gray-300/80">
-          <span className="flex items-center space-x-1">
+      <div className="flex items-center space-x-2 md:space-x-4">
+        <div className="flex items-center space-x-2 md:space-x-3 text-xs md:text-sm text-gray-300/80">
+          <span className="hidden md:flex items-center space-x-1">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
               <path d="M20 10V8h-4V4h-2v4h-4V4H8v4H4v2h4v4H4v2h4v4h2v-4h4zm-6 4h-4v-4h4v4z" fill="currentColor"/>
             </svg>
             <span>100%</span>
           </span>
-          <span className="flex items-center space-x-1">
+          <span className="hidden md:flex items-center space-x-1">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="currentColor"/>
               <path d="M12 6.75c-2.9 0-5.25 2.35-5.25 5.25s2.35 5.25 5.25 5.25 5.25-2.35 5.25-5.25S14.9 6.75 12 6.75z" fill="currentColor"/>
@@ -755,14 +767,14 @@ export default function DesktopUI() {
       {desktopIcons.map((item, index) => (
         <motion.div
           key={index}
-          drag
+          drag={!isMobile}
           dragMomentum={false}
           dragElastic={0}
           dragConstraints={{
             top: 40,
             left: 0,
             right: windowDimensions.width - 100,
-            bottom: windowDimensions.height - 250
+            bottom: windowDimensions.height - (isMobile ? 190 : 250)
           }}
           dragTransition={{ 
             bounceStiffness: 800,
@@ -771,8 +783,12 @@ export default function DesktopUI() {
           }}
           whileDrag={{ scale: 1.05 }}
           animate={{
-            top: iconPositions[index]?.top || item.position.top,
-            left: iconPositions[index]?.left || item.position.left,
+            top: isMobile
+              ? mobileIconPositions[index]?.top ?? item.position.top
+              : (iconPositions[index]?.top || item.position.top),
+            left: isMobile
+              ? mobileIconPositions[index]?.left ?? item.position.left
+              : (iconPositions[index]?.left || item.position.left),
           }}
           transition={{
             type: "spring",
@@ -782,7 +798,7 @@ export default function DesktopUI() {
           }}
           onDragStart={() => setIsDragging(true)}
           onDragEnd={(_, info) => handleDragEnd(index, info)}
-          className="flex flex-col items-center cursor-move touch-none select-none absolute"
+          className={`flex flex-col items-center touch-none select-none absolute ${isMobile ? 'cursor-pointer' : 'cursor-move'}`}
           onClick={(e) => {
             if (!isDragging) {
               handleIconClick(item.title);
@@ -792,8 +808,8 @@ export default function DesktopUI() {
           <div className="p-2 rounded-lg dock-hover">
             {item.icon}
           </div>
-          <span className="mt-1 text-xs md:text-sm text-white bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10 whitespace-nowrap">
-            {item.title}
+          <span className="mt-1 text-[11px] md:text-sm text-white bg-black/50 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10 whitespace-nowrap max-w-[110px] overflow-hidden text-ellipsis text-center">
+            {isMobile ? (iconLabelMap[item.title] || item.title) : item.title}
           </span>
         </motion.div>
       ))}
@@ -802,8 +818,8 @@ export default function DesktopUI() {
       <MenuBar />
 
       {/* Dock Bar */}
-      <div className="fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center w-[95%] md:w-auto">
-        <div className="flex items-center justify-center gap-2 md:gap-4 h-16 md:h-20 bg-white/10 backdrop-blur-3xl px-3 md:px-6 py-2 rounded-2xl border border-white/20 w-full md:w-auto">
+      <div className="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center w-[96%] md:w-auto z-20">
+        <div className="flex items-center justify-evenly md:justify-center md:gap-4 h-16 md:h-20 bg-white/10 backdrop-blur-3xl px-3 md:px-6 py-2 rounded-2xl border border-white/20 w-full md:w-auto">
           {Object.entries(sections).map(([key, { icon, title }]) => (
             <div
               key={key}
@@ -816,7 +832,7 @@ export default function DesktopUI() {
                 {icon}
               </div>
               {/* Tooltip */}
-              <div className="absolute -top-8 scale-0 group-hover:scale-100 transition-all duration-200 bg-gray-800/90 text-xs px-2 py-1 rounded-lg whitespace-nowrap backdrop-blur-sm text-white/90 border border-white/10">
+              <div className="absolute -top-8 scale-0 group-hover:scale-100 transition-all duration-200 bg-gray-800/90 text-xs px-2 py-1 rounded-lg whitespace-nowrap backdrop-blur-sm text-white/90 border border-white/10 hidden md:block">
                 {title}
               </div>
             </div>
@@ -826,7 +842,7 @@ export default function DesktopUI() {
 
       {/* Mock Browser Window */}
       {selectedSection && (
-        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-[900px] h-[80vh] md:h-[500px] bg-gray-900/95 rounded-xl border border-white/10 shadow-2xl window-transition backdrop-blur-xl">
+        <div className="fixed top-[48%] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[96vw] md:w-[900px] h-[78dvh] md:h-[500px] bg-gray-900/95 rounded-xl border border-white/10 shadow-2xl window-transition backdrop-blur-xl z-30">
           {/* Window Header */}
           <div className="flex items-center justify-between p-3 border-b border-white/10">
             <div className="flex items-center gap-2">
@@ -843,16 +859,16 @@ export default function DesktopUI() {
           </div>
           
           {/* Window Content */}
-          <div className="flex flex-col md:flex-row h-[calc(100%-44px)]">
+          <div className="flex flex-col md:flex-row h-[calc(100%-44px)] overflow-hidden">
             {/* Sidebar */}
-            <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/10 p-4">
+            <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/10 p-3 md:p-4">
               <div className="text-sm font-medium text-gray-400 mb-2">Quick Links</div>
-              <div className="flex md:block overflow-x-auto md:overflow-x-hidden md:h-[calc(100%-2rem)] overflow-y-auto custom-scrollbar pr-2 space-x-2 md:space-x-0 md:space-y-1">
+              <div className="flex md:block overflow-x-auto md:overflow-x-hidden md:h-[calc(100%-2rem)] overflow-y-hidden md:overflow-y-auto custom-scrollbar pr-2 space-x-2 md:space-x-0 md:space-y-1">
                 {Object.entries(sections).map(([key, { title, icon }]) => (
                   <div
                     key={key}
                     onClick={() => setSelectedSection(key as SectionKey)}
-                    className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
+                    className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors whitespace-nowrap ${
                       selectedSection === key ? 'bg-white/10' : 'hover:bg-white/5'
                     }`}
                   >
@@ -864,7 +880,7 @@ export default function DesktopUI() {
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 p-3 md:p-6 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 p-3 md:p-6 overflow-y-auto custom-scrollbar pb-24 md:pb-6">
               {sections[selectedSection].content}
             </div>
           </div>
