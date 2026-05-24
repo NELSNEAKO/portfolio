@@ -398,6 +398,30 @@ const sections: Record<SectionKey, Section> = {
                   <span className="px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-300">Google Cloud Run</span>
                 </div>
               </div>
+
+              <div className="bg-gradient-to-br from-gray-500/10 to-gray-600/10 p-4 rounded-xl border border-gray-500/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <FaGithub className="text-white w-6 h-6" />
+                  <h4 className="font-medium text-gray-300">Git & CI/CD</h4>
+                </div>
+                <p className="text-sm text-gray-400 mb-2">Used in:</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-300">Version Control</span>
+                  <span className="px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-300">Automated Deployment</span>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-gray-500/10 to-gray-600/10 p-4 rounded-xl border border-gray-500/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <FaTools className="text-gray-300 w-6 h-6" />
+                  <h4 className="font-medium text-gray-300">YAML Configuration</h4>
+                </div>
+                <p className="text-sm text-gray-400 mb-2">Used in:</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-300">Infrastructure as Code</span>
+                  <span className="px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-300">CI/CD Pipelines</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Build
+    name: Buildis my
     runs-on: ubuntu-latest
 
     steps:
