@@ -1,4 +1,4 @@
-name: CI/CD
+name: Production Deploy (Vercel)
 
 on:
   workflow_dispatch:
