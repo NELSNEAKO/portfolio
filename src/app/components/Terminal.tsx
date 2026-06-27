@@ -7,6 +7,7 @@ import { SiTypescript, SiTailwindcss, SiVuedotjs, SiNuxtdotjs } from "react-icon
 import { motion } from 'framer-motion';
 import Notification from './Notification';
 import MockFileManager from './MockFileManager';
+import ContactForm from './ContactForm';
 
 interface DesktopIcon {
   title: string;
@@ -591,20 +592,7 @@ const sections: Record<SectionKey, Section> = {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-500/5 to-purple-600/5 p-6 rounded-xl border border-purple-500/20 flex flex-col items-center justify-center text-center">
-            <div className="p-3 bg-purple-500/20 rounded-full mb-4">
-              <svg className="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-medium text-purple-400 mb-2">Contact Form Coming Soon!</h3>
-            <p className="text-gray-400 mb-4">The contact form is currently under development.</p>
-            <a href="mailto:Neil.traya78@gmail.com" 
-               className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 py-2 px-6 rounded-lg transition-colors inline-flex items-center gap-2">
-              <FaEnvelope className="w-4 h-4" />
-              Send me an email instead
-            </a>
-          </div>
+          <ContactForm />
         </div>
       </div>
     )
